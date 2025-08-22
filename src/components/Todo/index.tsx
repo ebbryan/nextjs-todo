@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import TodoItem from "../TodoItem";
 import CreateForm from "../TodoForm/CreateForm";
 import { TodoType } from "@/zodTypes/todo.type";
+import UpdateForm from "../TodoForm/UpdateForm";
 
 export type TodoUpdateData = Omit<TodoType, "createdAt" | "updatedAt">;
 
@@ -51,9 +52,7 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
         ))}
       </div>
       {isEditing ? (
-        <h1>
-          {updateTodo?.title}, {updateTodo?.status}
-        </h1>
+        <UpdateForm todo={updateTodo} onTodoClose={todoCloseHandler} />
       ) : (
         <CreateForm />
       )}
