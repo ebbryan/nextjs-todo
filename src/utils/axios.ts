@@ -1,0 +1,5 @@
+import axios from "axios";
+
+export const endpoint = axios.create({
+  baseURL: process.env.API_BASE_URL || "http://localhost:8339",
+});
