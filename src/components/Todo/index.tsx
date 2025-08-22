@@ -22,13 +22,13 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
       if (todoPayload) {
         setIsEditing(true);
         setUpdateTodo(todoPayload);
-        setActiveTodoId(todoPayload.id); // track which todo is active
+        setActiveTodoId(todoPayload.id);
       }
     };
     const onCloseEdit = () => {
       setIsEditing(false);
       setUpdateTodo(undefined);
-      setActiveTodoId(""); // reset active highlight
+      setActiveTodoId("");
     };
 
     return { onEdit, onCloseEdit };
@@ -53,7 +53,7 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
             todo={todo}
             isEditing={isEditing}
             isActive={activeTodoId === todo.id}
-            isDimmed={isEditing && activeTodoId !== todo.id} // only dim when editing & it's NOT the active one
+            isDimmed={isEditing && activeTodoId !== todo.id}
             onTodoClick={(updateData) => todoClickHandler(updateData)}
           />
         ))}
