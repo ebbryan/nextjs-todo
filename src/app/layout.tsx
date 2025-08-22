@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { B612 } from "next/font/google";
+import ProvidersBarProvider from "@/components/Providers/ProgressBarProvider";
 
 const b612 = B612({
   subsets: ["latin"],
@@ -21,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={b612.className}>{children}</body>
+      <body className={b612.className}>
+        <ProvidersBarProvider>{children}</ProvidersBarProvider>
+      </body>
     </html>
   );
 }

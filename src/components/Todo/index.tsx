@@ -16,8 +16,12 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Spinner from "../Spinner";
+import { createTodo } from "@/app/actions";
+import { useRouter } from "@bprogress/next/app";
 
 const Todo = ({ todoData }: { todoData: TodoType[] }) => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof todoSchema>>({
     resolver: zodResolver(todoSchema),
     defaultValues: {
@@ -26,9 +30,20 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
     },
   });
 
-  const onSubmit = async (payload: TodoType) => {
-    console.log(payload);
+  const onSubmit = async (
+    payload: Omit<TodoType, "id" | "createdAt" | "updatedAt">
+  ) => {
+    const response = await createTodo(payload);
+    if (!response.success) {
+      form.setError("root", {
+        type: "manual",
+        message: response.message || "Failed to create todo",
+      });
+      return;
+    }
+
     form.reset();
+    router.refresh();
   };
 
   return (
