@@ -15,15 +15,20 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
     title: "",
     status: "pending",
   });
+  const [activeTodoId, setActiveTodoId] = useState<string | undefined>("");
 
   const togglers = () => {
     const onEdit = (todoPayload: TodoUpdateData | undefined) => {
-      if (!isEditing) setIsEditing(true);
-      setUpdateTodo(todoPayload);
+      if (todoPayload) {
+        setIsEditing(true);
+        setUpdateTodo(todoPayload);
+        setActiveTodoId(todoPayload.id); // track which todo is active
+      }
     };
     const onCloseEdit = () => {
-      if (isEditing) setIsEditing(false);
+      setIsEditing(false);
       setUpdateTodo(undefined);
+      setActiveTodoId(""); // reset active highlight
     };
 
     return { onEdit, onCloseEdit };
@@ -40,19 +45,25 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
   };
 
   return (
-    <section className="w-full mx-auto p-2">
-      <div className="overflow-y-auto max-h-[calc(100vh-200px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+    <section className="w-full mx-auto p-2 flex flex-col gap-4">
+      <div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-200px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {todoData.map((todo) => (
           <TodoItem
             key={todo.id}
             todo={todo}
+            isEditing={isEditing}
+            isActive={activeTodoId === todo.id}
+            isDimmed={isEditing && activeTodoId !== todo.id} // only dim when editing & it's NOT the active one
             onTodoClick={(updateData) => todoClickHandler(updateData)}
-            onCloseEdit={todoCloseHandler}
           />
         ))}
       </div>
       {isEditing ? (
-        <UpdateForm todo={updateTodo} onTodoClose={todoCloseHandler} />
+        <UpdateForm
+          todo={updateTodo}
+          isEditing={isEditing}
+          onTodoClose={todoCloseHandler}
+        />
       ) : (
         <CreateForm />
       )}
