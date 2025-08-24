@@ -8,7 +8,12 @@ import UpdateForm from "../TodoForm/UpdateForm";
 
 export type TodoUpdateData = Omit<TodoType, "createdAt" | "updatedAt">;
 
-const Todo = ({ todoData }: { todoData: TodoType[] }) => {
+interface TodoComponentProps {
+  todoData: TodoType[];
+  isSuccess: boolean;
+}
+
+const Todo = (props: TodoComponentProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [updateTodo, setUpdateTodo] = useState<TodoUpdateData | undefined>({
     id: "",
@@ -40,6 +45,10 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
     }
   };
 
+  //   if (!success || !data || data.length === 0) {
+  //   return <div className="text-center">No todos available</div>;
+  // }
+
   const todoCloseHandler = () => {
     togglers().onCloseEdit();
   };
@@ -47,16 +56,20 @@ const Todo = ({ todoData }: { todoData: TodoType[] }) => {
   return (
     <section className="w-full mx-auto p-2 flex flex-col gap-4">
       <div className="flex flex-col gap-2 overflow-y-auto max-h-[calc(100vh-200px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        {todoData.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            isEditing={isEditing}
-            isActive={activeTodoId === todo.id}
-            isDimmed={isEditing && activeTodoId !== todo.id}
-            onTodoClick={(updateData) => todoClickHandler(updateData)}
-          />
-        ))}
+        {!props.isSuccess || !props.todoData || props.todoData.length === 0 ? (
+          <div className="text-center">No todos available</div>
+        ) : (
+          props.todoData.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              isEditing={isEditing}
+              isActive={activeTodoId === todo.id}
+              isDimmed={isEditing && activeTodoId !== todo.id}
+              onTodoClick={(updateData) => todoClickHandler(updateData)}
+            />
+          ))
+        )}
       </div>
       {isEditing ? (
         <UpdateForm
