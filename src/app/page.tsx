@@ -1,6 +1,5 @@
 import Todo from "@/components/Todo";
 import { getTodos } from "./actions";
-import dayjs from "dayjs";
 
 export default async function Home() {
   const todos = await getTodos();
@@ -14,11 +13,7 @@ export default async function Home() {
     <main className="flex flex-col items-center justify-center max-w-xl mx-auto p-4">
       <h1 className="text-3xl font-bold text-center my-2">Todo App</h1>
       <p className="text-center">Manage your tasks efficiently</p>
-      <Todo
-        todoData={data.sort(
-          (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
-        )}
-      />
+      <Todo todoData={data} />
     </main>
   );
 }

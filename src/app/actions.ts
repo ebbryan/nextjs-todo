@@ -33,10 +33,8 @@ export const updateTodo = async (
   id: string,
   payload: Partial<Omit<TodoType, "id" | "createdAt" | "updatedAt">>
 ) => {
-  console.log("Updating todo with ID:", id, "and payload:", payload);
   try {
     const response = await endpoint.patch(`/todos/update/${id}`, payload);
-    console.log(response);
     return response.data;
   } catch (error: unknown) {
     if (error instanceof AxiosError) {
